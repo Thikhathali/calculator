@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: monospace, 'Courier New', Courier;
+}
+.container {    
+    text-align: center;
+    width: 20vw;
+    margin: auto;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 10px;
+}
+
+button {
+    color: #ffff;
+    background-color:cadetblue;
+    width: 50px;
+    height: 60px;
+    border-radius: 50%;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 10px solid rgb(2, 61, 63);
+    transition: all ease-in-out .1s;
+}
+
+button:hover {
+    scale: 1.1;
+}
+
+.footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100vw;
+    text-align: center;
+}
