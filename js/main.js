@@ -11,20 +11,18 @@ $(() =>{
     let secondOperand;
     let operator;
 
-    const operate = (firstOperand,  operator, secondOperand) => {
+    const operate = (firstOperand, operator, secondOperand) => {
         switch(operator) {
-            case add:
+            case '+':
                 return add(firstOperand, secondOperand);
-            case subtract:
+            case '-':
                 return subtract(firstOperand, secondOperand);
-            case multiply:
+            case 'x':
                 return multiply(firstOperand, secondOperand);
             default:
                 return divide(firstOperand, secondOperand);
         }
     }
-
-    log(operate(5, subtract, 2));
 
     let $outputVal = $('.display');
     let $buttonsVal = $('button');
@@ -33,15 +31,36 @@ $(() =>{
     $buttonsVal.on('click', function(){
         let selectedVal = $(this).text();
 
+       if(selectedVal === 'C')  window.location.reload()
+
         if(Number(selectedVal)) {
             updateDisplay += selectedVal;
         } else if(selectedVal === 'x' || selectedVal === '/' || 
             selectedVal === '-' || selectedVal === '+' ) {
+
+            //Select operator once
             if(operator === selectedVal) return
+
+            //Update new operator when selected again 
+            if(operator){
+                operator = '';
+                updateDisplay = firstOperand + operator;
+            } 
+
             operator = selectedVal;
             firstOperand = updateDisplay;
             updateDisplay = firstOperand + operator;
-        } 
+        }
+        
+        if(operator && Number(updateDisplay.split('').at(-1))) {
+            secondOperand = Number(updateDisplay.split('').at(-1));
+        }
+
+        if(selectedVal === '=' && operator && secondOperand) {
+            let res = operate(Number.parseInt(firstOperand), operator,
+             Number.parseInt(secondOperand));
+            updateDisplay = res;
+        }
         $outputVal.text(updateDisplay);
     });
 });
