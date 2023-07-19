@@ -27,15 +27,22 @@ $(() =>{
     let $outputVal = $('.display');
     let $buttonsVal = $('button');
     let updateDisplay = '';
+    let res = '';
 
     $buttonsVal.on('click', function(){
         let selectedVal = $(this).text();
 
-       if(selectedVal === 'C')  window.location.reload()
+        if(selectedVal === 'C')  window.location.reload()
 
-        if(Number(selectedVal)) {
+        if(res !== '' && !Number(selectedVal) && selectedVal !== '=') {
+            firstOperand = res;
+            operator = selectedVal;
+            updateDisplay = firstOperand + operator;
+        }
+        else if(Number(selectedVal)) {
             updateDisplay += selectedVal;
-        } else if(selectedVal === 'x' || selectedVal === '/' || 
+        } 
+        else if(selectedVal === 'x' || selectedVal === '/' || 
             selectedVal === '-' || selectedVal === '+' ) {
 
             //Select operator once
@@ -57,9 +64,10 @@ $(() =>{
         }
 
         if(selectedVal === '=' && operator && secondOperand) {
-            let res = operate(Number.parseInt(firstOperand), operator,
+             res = operate(Number.parseInt(firstOperand), operator,
              Number.parseInt(secondOperand));
             updateDisplay = res;
+            secondOperand = '';
         }
         $outputVal.text(updateDisplay);
     });
