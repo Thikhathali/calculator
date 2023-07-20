@@ -39,7 +39,8 @@ $(() =>{
             operator = selectedVal;
             updateDisplay = firstOperand + operator;
         }
-        else if(Number(selectedVal)) {
+        else if(Number(selectedVal) || selectedVal === '0' || selectedVal
+        === '.') {
             updateDisplay += selectedVal;
         } 
         else if(selectedVal === 'x' || selectedVal === '/' || 
@@ -59,13 +60,14 @@ $(() =>{
             updateDisplay = firstOperand + operator;
         }
         
-        if(operator && Number(updateDisplay.split('').at(-1))) {
-            secondOperand = Number(updateDisplay.split('').at(-1));
+        if(operator && Number(updateDisplay.split(operator).at(-1))) {
+            secondOperand = Number(updateDisplay.split(operator).at(-1));
         }
 
         if(selectedVal === '=' && operator && secondOperand) {
-             res = operate(Number.parseInt(firstOperand), operator,
-             Number.parseInt(secondOperand));
+            log(updateDisplay);
+             res = operate(Number.parseFloat(firstOperand), operator,
+             Number.parseFloat(secondOperand));
             updateDisplay = res;
             secondOperand = '';
         }
