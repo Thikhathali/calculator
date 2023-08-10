@@ -10,6 +10,8 @@ $(() =>{
     let firstOperand;
     let secondOperand;
     let operator;
+    let specialChar;
+    let zero;
 
     const operate = (firstOperand, operator, secondOperand) => {
         switch(operator) {
@@ -24,7 +26,8 @@ $(() =>{
         }
     }
 
-    let $outputVal = $('.display');
+    let $outputVal = $('.display .res');
+    let $expressionVal = $('.display .exp');
     let $buttonsVal = $('button');
     let updateDisplay = '';
     let res = '';
@@ -34,14 +37,26 @@ $(() =>{
 
         if(selectedVal === 'C')  window.location.reload()
 
-        if(res !== '' && !Number(selectedVal) && selectedVal !== '=') {
+        if(res !== '' && !Number(selectedVal) && selectedVal !== '=' &&
+        selectedVal !== '.') {
+            specialChar = '';
+            zero = '';
             firstOperand = res;
             operator = selectedVal;
             updateDisplay = firstOperand + operator;
+            $expressionVal.text(updateDisplay);
         }
         else if(Number(selectedVal) || selectedVal === '0' || selectedVal
         === '.') {
+            if(specialChar === selectedVal || zero === selectedVal ) return
+
+            if(selectedVal === '.') {
+                specialChar = selectedVal;
+            } else if (selectedVal === '0') {
+                zero = selectedVal;
+            }
             updateDisplay += selectedVal;
+            $outputVal.text(updateDisplay);
         } 
         else if(selectedVal === 'x' || selectedVal === '/' || 
             selectedVal === '-' || selectedVal === '+' ) {
@@ -55,22 +70,32 @@ $(() =>{
                 updateDisplay = firstOperand + operator;
             } 
 
+            specialChar = '';
+            zero = '';
             operator = selectedVal;
             firstOperand = updateDisplay;
             updateDisplay = firstOperand + operator;
+            $expressionVal.text(updateDisplay);
         }
         
-        if(operator && Number(updateDisplay.split(operator).at(-1))) {
-            secondOperand = Number(updateDisplay.split(operator).at(-1));
+        if(operator && Number(updateDisplay.split(operator).at(-1)) || 
+        updateDisplay.split(operator).at(-1) === '0') {
+            secondOperand = updateDisplay.split(operator).at(-1);
+            $outputVal.text(secondOperand);
         }
 
         if(selectedVal === '=' && operator && secondOperand) {
-            log(updateDisplay);
-             res = operate(Number.parseFloat(firstOperand), operator,
-             Number.parseFloat(secondOperand));
-            updateDisplay = res;
-            secondOperand = '';
+            $expressionVal.text(updateDisplay + selectedVal).hide().slideDown();
+            
+            if(operator === '/' && secondOperand === '0') {
+                updateDisplay = "0 divisor error!"
+            } else {
+                res = operate(Number.parseFloat(firstOperand), operator,
+                Number.parseFloat(secondOperand));
+               updateDisplay = res;
+               secondOperand = '';
+            }
+            $outputVal.text(updateDisplay).hide().fadeIn(1100);
         }
-        $outputVal.text(updateDisplay);
     });
 });
