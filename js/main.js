@@ -89,12 +89,15 @@ $(() =>{
             
             if(operator === '/' && secondOperand === '0') {
                 updateDisplay = "0 divisor error!"
+                $expressionVal.text('');
             } else {
                 res = operate(Number.parseFloat(firstOperand), operator,
                 Number.parseFloat(secondOperand));
                updateDisplay = res;
                secondOperand = '';
             }
+            (typeof(updateDisplay) == 'string') ? $outputVal.text(updateDisplay)
+                .animate({fontSize: '+=0.1em'},1000):
             $outputVal.text(updateDisplay).hide().fadeIn(1100);
         }
     });
